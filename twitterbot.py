@@ -12,7 +12,7 @@ import time
 import sys
 from hashtags import hashtags
 searches_per_day = 2
-days_to_follow_back = 1
+days_to_follow_back = 3
 
 target_users = []
 
@@ -41,7 +41,7 @@ class Bot:
 		"""searches twitter API for tweets containing the given hashtag
 		   and returns a list of the users' screen names"""
 		users = []
-		for tweet in tweepy.Cursor(self.api.search, q = hashtag).items(3):
+		for tweet in tweepy.Cursor(self.api.search, q = hashtag).items(100):
 			users.append(tweet.user.screen_name)
 			target_users.append("@"+ tweet.user.screen_name)
 		print('%s users found using %s:\n' % (len(users), hashtag))
@@ -98,7 +98,7 @@ class Bot:
 				self.api.destroy_friendship(self.api.get_user(user).screen_name)
 				print("You are no longer following user: " + self.api.get_user(user).screen_name)
 				unfollow_count += 1
-				time.sleep(1)
+				time.sleep(5)
 			print('%s users unfollowed' % (unfollow_count))
 		print("---all targets unfollowed---")
 
@@ -140,7 +140,7 @@ while True:
 		tweet_searches += 1
 		target_users = []
 		#change wait time back to 86400 = 1 day
-		time.sleep(300/searches_per_day)
+		time.sleep(86400/searches_per_day)
 		#wait 3 days and unfollow
 		twitter_bot.unfollow()
 
