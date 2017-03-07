@@ -1,2 +1,0 @@
-# twitterbot
-A twitter bot
