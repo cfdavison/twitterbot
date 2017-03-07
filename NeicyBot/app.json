@@ -1,8 +1,0 @@
-{
-  "name": "Twitter Bot",
-  "description": "A twitter script that follows and unfollows based on set rules and can search on twitter",
-  "image": "heroku/python",
-  "repository": "https://github.com/cfdavison/twitterbot",
-  "keywords": ["python", "django","tweepy" ],
-  "addons": [ "heroku-postgresql" ]
-}
