@@ -1,1 +1,1 @@
-web: python twitterbot.py runserver 0.0.0.0:5000
+web: python twitterbot.py runserver 0.0.0.0:$PORT
