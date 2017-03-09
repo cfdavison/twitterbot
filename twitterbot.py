@@ -15,6 +15,7 @@ searches_per_day = 2
 days_to_follow_back = 3
 
 target_users = []
+followed_this_cycle = []
 
 class Bot:
 	def __init__(self):
@@ -41,7 +42,7 @@ class Bot:
 		"""searches twitter API for tweets containing the given hashtag
 		   and returns a list of the users' screen names"""
 		users = []
-		for tweet in tweepy.Cursor(self.api.search, q = hashtag).items(100):
+		for tweet in tweepy.Cursor(self.api.search, q = hashtag).items(30):
 			users.append(tweet.user.screen_name)
 			target_users.append("@"+ tweet.user.screen_name)
 		print('%s users found using %s:\n' % (len(users), hashtag))
@@ -71,7 +72,6 @@ class Bot:
 		while (i < len(target_users)):
 			if target_users[i] in friends:
 				del target_users[i]
-				print(target_users)
 			else:
 				i += 1
 		return target_users
@@ -81,17 +81,22 @@ class Bot:
 		print("---starting follow process---")
 		to_follow = 0
 		for user in target_users:
-			self.api.create_friendship(user)
-			to_follow += 1
-			print("%s) You are now following user: %s" % (to_follow, user))
-			time.sleep(5)
+			try:
+				self.api.create_friendship(user)
+				to_follow += 1
+				print("%s) You are now following user: %s" % (to_follow, user))
+				followed_this_cycle.append(user)
+				time.sleep(5)
+			except Exception:
+				print("user: %s cannot be followed" % (user))
+				pass
 		print("---all targets followed---")
 
 	def unfollow(self):
 		#unfollows all users that are not following back
 		print("---starting unfollow process---")
 		followers = self.get_followers()
-		friends = self.get_friends()
+		friends = followed_this_cycle
 		unfollow_count = 0
 		for user in friends:
 			if user not in followers:
@@ -140,9 +145,11 @@ while True:
 		tweet_searches += 1
 		target_users = []
 		#change wait time back to 86400 = 1 day
-		time.sleep(86400/searches_per_day)
-		#wait 3 days and unfollow
-		twitter_bot.unfollow()
+		time.sleep(85400/searches_per_day)
+	#wait 3 days and unfollow
+	twitter_bot.unfollow()
+	followed_this_cycle = []
+	time.sleep(900)
 
 
 

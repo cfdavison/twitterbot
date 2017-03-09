@@ -1,6 +1,5 @@
 hashtags = [
 '#stackablerings',
-'#pinknails',
 '#pinkmani',
 '#thinkpink', 
 '#currentobsession',
